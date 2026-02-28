@@ -1,11 +1,11 @@
-﻿using Domain.Models.Common;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using URLShortener.Domain.Models.Common;
+using URLShortener.Interfaces.Helpers;
+using URLShortener.Models.Common;
 
 namespace URLShortener.Infra.Helpers;
-public sealed class UpdateAuditFieldsInterceptor(UserContext userContext) : SaveChangesInterceptor
+public sealed class UpdateAuditFieldsInterceptor(IUserContext userContext) : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,

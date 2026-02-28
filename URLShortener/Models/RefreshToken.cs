@@ -1,6 +1,6 @@
-﻿using URLShortener.Domain.Models.Common;
+﻿using URLShortener.Models.Common;
 
-namespace URLShortener.Domain.Models;
+namespace URLShortener.Models;
 
 public class RefreshToken : PrimaryKeyBaseEntity
 {

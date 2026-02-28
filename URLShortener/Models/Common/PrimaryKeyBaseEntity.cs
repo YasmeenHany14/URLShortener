@@ -1,4 +1,4 @@
-﻿namespace URLShortener.Domain.Models.Common;
+﻿namespace URLShortener.Models.Common;
 
 public abstract class PrimaryKeyBaseEntity : BaseEntity
 {

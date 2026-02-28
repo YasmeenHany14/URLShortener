@@ -1,8 +1,8 @@
-﻿using URLShortener.Domain;
+﻿using URLShortener.Interfaces.Helpers;
 
 namespace URLShortener.Infra.Helpers;
 
-public sealed class UserContext(IHttpContextAccessor httpContextAccessor)
+public sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
     public Guid UserId =>
         httpContextAccessor

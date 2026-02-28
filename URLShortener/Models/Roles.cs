@@ -1,4 +1,4 @@
-﻿namespace URLShortener.Domain.Models;
+﻿namespace URLShortener.Models;
 
 public class Roles
 {

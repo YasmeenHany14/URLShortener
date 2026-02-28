@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using URLShortener.Domain.Models;
+using URLShortener.Models;
 
 namespace URLShortener.Infra.Configuration;
 

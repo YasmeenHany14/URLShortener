@@ -1,3 +1,3 @@
-﻿namespace Domain.Models.Common;
+﻿namespace URLShortener.Models.Common;
 
 public interface IHardDelete;

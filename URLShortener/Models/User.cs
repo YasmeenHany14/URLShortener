@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace URLShortener.Domain.Models;
+namespace URLShortener.Models;
 
 public class User : IdentityUser
 {

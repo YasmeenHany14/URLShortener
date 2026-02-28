@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using URLShortener.Domain.Models;
 using URLShortener.Infra;
 using URLShortener.Infra.Helpers;
+using URLShortener.Interfaces.Helpers;
+using URLShortener.Models;
 
 namespace URLShortener;
 
@@ -11,10 +12,9 @@ public static class StartupHelper
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<UpdateAuditFieldsInterceptor>();
-        services.AddSingleton<UserContext>();
+        services.AddSingleton<IUserContext, UserContext>();
         services.AddDbContext<UrlContext>((sp, options) =>
         {
-            services.AddSingleton<UpdateAuditFieldsInterceptor>();
             var auditInterceptor = sp.GetRequiredService<UpdateAuditFieldsInterceptor>();
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             options.AddInterceptors(auditInterceptor);
@@ -37,9 +37,5 @@ public static class StartupHelper
             }).AddEntityFrameworkStores<UrlContext>()
             .AddDefaultTokenProviders();
         return services;
-    }
-    public static WebApplication ConfigureServices(this WebApplication app)
-    {
-        return app;
     }
 }
