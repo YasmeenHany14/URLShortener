@@ -73,6 +73,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="16.0.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.3" />
       <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="11.0.0-preview.1.26104.118" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.3" />
@@ -88,9 +90,10 @@
 
     <ItemGroup>
       <Folder Include="Api\" />
-      <Folder Include="Interfaces\Services\" />
+      <Folder Include="Api\Controllers\" />
+      <Folder Include="Dtos\" />
+      <Folder Include="Helpers\Validators\" />
       <Folder Include="Models\Dtos\" />
-      <Folder Include="Services\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,4 @@
-using System.Security.Claims;
 using URLShortener;
-using URLShortener.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,14 +9,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAntiforgery();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy(IdentityData.AdminUserPolicyName, p =>
-    {
-        p.RequireClaim(ClaimTypes.Role, "Admin");
-    });
-    options.AddPolicy(IdentityData.OwnerUserPolicyName, policy => policy.RequireRole("User"));
-});
+builder.Services.AddAuthorization();
 
 // builder.Services.AddCors(options =>
 // {

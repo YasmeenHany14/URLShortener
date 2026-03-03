@@ -4,12 +4,15 @@ using URLShortener.Models.Common;
 
 namespace URLShortener.Infra.Repositories;
 
-public class BaseRepository<TEntity>(UrlContext context) : IBaseRepository<TEntity> where TEntity : BaseEntity
+public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
 {
+    protected readonly UrlContext Context;
+    protected BaseRepository(UrlContext context) => Context = context;
+    
     // add, delete
     public async Task<TEntity> CreateAsync(TEntity entity)
     {
-        await context.Set<TEntity>().AddAsync(entity);
+        await Context.Set<TEntity>().AddAsync(entity);
         return entity;
     }
 
@@ -17,6 +20,11 @@ public class BaseRepository<TEntity>(UrlContext context) : IBaseRepository<TEnti
     // TODO:think about soft delete later
     public void Delete(TEntity entity)
     {
-        context.Set<TEntity>().Remove(entity);
+        Context.Set<TEntity>().Remove(entity);
+    }
+
+    public async Task<int> SaveChangesAsync()
+    {
+        return await Context.SaveChangesAsync();
     }
 }

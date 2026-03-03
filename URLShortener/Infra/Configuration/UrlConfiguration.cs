@@ -9,13 +9,16 @@ public class UrlConfiguration : IEntityTypeConfiguration<Url>
     public void Configure(EntityTypeBuilder<Url> builder)
     {
         builder.Property(u => u.Id)
-            .ValueGeneratedNever();
+            .ValueGeneratedNever()
+            .HasDefaultValueSql("NEXT VALUE FOR UrlNumber");
+        
         builder.Property(u => u.OriginalUrl)
             .IsRequired()
             .HasMaxLength(200);
         builder.Property(u => u.EncodedUrl)
             .IsRequired() // add min len later after deciding on the service name
             .HasMaxLength(100); // should be changed later
+        
         builder.Property(u => u.OriginalUrl).IsRequired();
     }
 }

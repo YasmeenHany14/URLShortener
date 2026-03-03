@@ -11,6 +11,9 @@ public class UrlContext : IdentityDbContext<User>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        builder.HasSequence<int>("UrlNumber")
+            .StartsAt(100)
+            .IncrementsBy(10);
         builder.ApplyConfigurationsFromAssembly(typeof(UrlContext).Assembly);
     }
 
@@ -20,6 +23,6 @@ public class UrlContext : IdentityDbContext<User>
     }
     
     // define tables here
-    DbSet<Url> Urls { get; set; }
-    DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<Url> Urls { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 }

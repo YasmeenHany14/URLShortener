@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using URLShortener.Infra;
 using URLShortener.Infra.Helpers;
 using URLShortener.Interfaces.Helpers;
+using URLShortener.Interfaces.Services;
 using URLShortener.Models;
+using URLShortener.Services.AuthServices;
 
 namespace URLShortener;
 
@@ -36,6 +38,15 @@ public static class StartupHelper
                 options.User.RequireUniqueEmail = true; 
             }).AddEntityFrameworkStores<UrlContext>()
             .AddDefaultTokenProviders();
+        return services;
+    }
+
+    public static IServiceCollection AddApplication(this IServiceCollection services)
+    {
+        services.AddAutoMapper(cfg => { }, typeof(StartupHelper).Assembly);
+
+        services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IGenerateTokenService, GenerateTokenService>();
         return services;
     }
 }
