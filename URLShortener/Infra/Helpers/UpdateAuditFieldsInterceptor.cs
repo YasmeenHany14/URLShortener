@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using URLShortener.Interfaces.Helpers;
 using URLShortener.Models.Common;
 
 namespace URLShortener.Infra.Helpers;
-public sealed class UpdateAuditFieldsInterceptor(IUserContext userContext) : SaveChangesInterceptor
+public sealed class UpdateAuditFieldsInterceptor : SaveChangesInterceptor
 {
     public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
         DbContextEventData eventData,
@@ -21,16 +20,13 @@ public sealed class UpdateAuditFieldsInterceptor(IUserContext userContext) : Sav
                 cancellationToken);
         }
         
-        IEnumerable<EntityEntry<BaseEntity>> entries = dbContext
+        IEnumerable<EntityEntry<PrimaryKeyBaseEntity>> entries = dbContext
             .ChangeTracker
-            .Entries<BaseEntity>();
-        
-        var isLoggedIn = userContext.IsAuthenticated;
-        Guid? currentUserId = isLoggedIn ? userContext.UserId : null;
+            .Entries<PrimaryKeyBaseEntity>();
         
         foreach (var entityEntry in entries)
         {
-            SetAuditFields(entityEntry, currentUserId.ToString());
+            SetAuditFields(entityEntry);
         }
         return base.SavingChangesAsync(
             eventData,
@@ -38,21 +34,9 @@ public sealed class UpdateAuditFieldsInterceptor(IUserContext userContext) : Sav
             cancellationToken);
     }
 
-    void SetAuditFields(EntityEntry<BaseEntity> entityEntry,string? currentUserId)
+    void SetAuditFields(EntityEntry<PrimaryKeyBaseEntity> entityEntry)
     {
         if (entityEntry.State == EntityState.Added || entityEntry.State == EntityState.Modified)
-        {
             entityEntry.Property(e => e.CreatedAt).CurrentValue = DateTime.Now;
-            entityEntry.Property(e => e.UpdatedAt).CurrentValue = DateTime.Now;
-            entityEntry.Property(e => e.CreatedBy).CurrentValue = currentUserId;
-            entityEntry.Property(e => e.UpdatedBy).CurrentValue = currentUserId;
-        }
-        if (entityEntry.State == EntityState.Deleted && entityEntry is not IHardDelete)
-        {
-            entityEntry.Property(e => e.IsDeleted).CurrentValue = true;
-            entityEntry.State = EntityState.Modified;
-            entityEntry.Property(e => e.UpdatedAt).CurrentValue = DateTime.Now;
-            entityEntry.Property(e => e.DeletedBy).CurrentValue = currentUserId;
-        }
     }
 }

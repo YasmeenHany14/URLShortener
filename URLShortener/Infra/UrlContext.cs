@@ -1,28 +1,33 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using URLShortener.Common;
 using URLShortener.Models;
 
 namespace URLShortener.Infra;
 
-public class UrlContext : IdentityDbContext<User>
+public class UrlContext : DbContext
 {
     public UrlContext(DbContextOptions<UrlContext> options) : base(options) { }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(builder);
-        builder.HasSequence<int>("UrlNumber")
-            .StartsAt(100)
-            .IncrementsBy(10);
-        builder.ApplyConfigurationsFromAssembly(typeof(UrlContext).Assembly);
-    }
+        modelBuilder.Entity<Url>(builder =>
+        {
+            builder.Property(e => e.Code)
+                .IsRequired()
+                .HasMaxLength(ShortLinkSettings.Length);
 
-    private void FilterDeletedEntities(ModelBuilder modelBuilder)
-    {
-        
+            builder.Property(e => e.ShortUrl)
+                .HasMaxLength(50)
+                .IsRequired();
+
+            builder.Property(e => e.OriginalUrl)
+                .HasMaxLength(500)
+                .IsRequired();
+            
+            builder
+                .HasIndex(shortenedUrl => shortenedUrl.Code)
+                .IsUnique();
+        });
     }
-    
-    // define tables here
     public DbSet<Url> Urls { get; set; }
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
 }
