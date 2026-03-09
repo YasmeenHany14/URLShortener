@@ -10,6 +10,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAntiforgery();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(builder.Configuration["CorsPolicy:PolicyName"]!,
+        policyBuilder => policyBuilder.WithOrigins(builder.Configuration["CorsPolicy:Origin"]!)
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -20,6 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseExceptionHandler();
+app.UseCors(builder.Configuration["CorsPolicy:PolicyName"]!);
 app.UseAntiforgery();
 app.UseHttpsRedirection();
 app.UseSwagger();
