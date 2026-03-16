@@ -31,7 +31,7 @@ public class UrlShorteningService(IUrlRepository urlRepository) : IUrlShortening
         {
             OriginalUrl = originUrl,
             Code = code,
-            ShortUrl = newUrl.shortUrl
+            ShortUrl = newUrl.shortUrlCode
         };
         
         await urlRepository.CreateAsync(entity);
