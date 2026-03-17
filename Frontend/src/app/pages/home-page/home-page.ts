@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, DestroyRef, inject, OnDestroy, signal} from '@angular/core';
 import {UrlService} from '../../core/services/url-service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputText} from 'primeng/inputtext';
@@ -13,6 +13,10 @@ import {Message} from 'primeng/message';
 import {MessageService} from 'primeng/api';
 import {ErrorMessages} from '../../shared/utils/error-messages';
 import {environment} from '../../../environments/environment';
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {Card} from 'primeng/card';
+import {ProgressSpinner} from 'primeng/progressspinner';
+import {ToastModule} from 'primeng/toast';
 
 @Component({
   selector: 'app-home-page',
@@ -24,16 +28,20 @@ import {environment} from '../../../environments/environment';
     InputIcon,
     IconField,
     ButtonModule,
-    Message
+    Message,
+    ProgressSpinner,
+    Card,
+    ToastModule
   ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
 })
 export class HomePage {
-  loading = signal(true);
+  loading = signal(false);
   error = signal<string | null>(null);
   private urlService = inject(UrlService);
   private messageService = inject(MessageService);
+  private destroyRef = inject(DestroyRef);
 
   getErrorMessages = getErrorMessages;
   isInvalid = isInvalid;
@@ -63,18 +71,30 @@ export class HomePage {
       });
       return;
     }
-    this.shortenUrlDetails.originalUrl = this.shortenUrlform.value.originalUrl!;
-
-
+    this.loading.set(true);
+    this.generatedUrl.shortUrlCode = '';
+    this.generateUrl(this.shortenUrlform.value.originalUrl!);
+    return;
   }
 
   generateUrl(originalUrl: string) {
-    const subscription = this.urlService.GenerateUrl(this.shortenUrlDetails).subscribe({
+    this.shortenUrlDetails.originalUrl = originalUrl;
+    const subscription = this.urlService.GenerateUrl(this.shortenUrlDetails)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
       next: (response) => {
         this.generatedUrl.shortUrlCode = `${environment.baseUrl}/${response.shortUrlCode}`;
+        this.loading.set(false);
       },
       error: (error) => {
-
+        this.loading.set(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'URL Shortening Failed',
+          detail: error?.message || 'An error occurred. Please try again.',
+          life: 4000,
+          closable: true
+        });
       }
     })
   }

@@ -1,0 +1,43 @@
+﻿// Shared SASS variables and mixins for theme and layout
+$primary-color: #ec4899; // Tailwind pink.500
+$secondary-color: #a78bfa; // Tailwind purple.500
+$surface-color: #fff;
+$border-radius: 0.5rem;
+// Reusable flex mixin
+@mixin navbar-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+@mixin card-shadow {
+  box-shadow: 0 4px 16px rgba(236, 72, 153, 0.08);
+}
+
+@mixin input-primary {
+  border: 1px solid $primary-color;
+  border-radius: $border-radius;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  &:focus {
+    border-color: $secondary-color;
+    outline: none;
+  }
+}
+
+@mixin btn-primary {
+  background: $primary-color;
+  color: #fff;
+  border: none;
+  border-radius: $border-radius;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: darken($primary-color, 10%);
+  }
+}

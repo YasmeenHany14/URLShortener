@@ -4,6 +4,7 @@ import Aura from '@primeuix/themes/aura';
 import { routes } from './app.routes';
 import { providePrimeNG } from "primeng/config";
 import {definePreset} from '@primeuix/themes';
+import {MessageService} from 'primeng/api';
 
 
 const MyPreset = definePreset(Aura, {
@@ -84,6 +85,7 @@ const MyPreset = definePreset(Aura, {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    MessageService,
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     providePrimeNG({

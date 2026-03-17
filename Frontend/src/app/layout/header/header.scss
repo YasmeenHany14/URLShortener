@@ -1,0 +1,27 @@
+@use 'theme' as *;
+
+// Theme variables
+$primary-color: #ec4899; // pink.500 from Tailwind
+$surface-color: #a78bfa; // purple.500 from Tailwind
+$navbar-bg: #fff;
+$navbar-shadow: 0 2px 8px rgba(0,0,0,0.04);
+
+.navbar-theme {
+  background: $navbar-bg;
+  box-shadow: $navbar-shadow;
+  @include navbar-flex;
+}
+
+.navbar-logo {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.app-title {
+  color: $primary-color;
+}
+
+
+// Future: .navbar-nav, .navbar-login for links/login
+
