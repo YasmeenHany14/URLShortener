@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 using URLShortener.Common;
 using URLShortener.Services;
 
@@ -26,6 +27,7 @@ public class UrlController(IUrlShorteningService urlShorteningService) : Control
 
     public record CreateUrlRequest
     {
+        [RegularExpression("(http(s)?:\\/\\/.)?(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_\\+.~#?&//=]*)", ErrorMessage = "Invalid URL")] // temperoraly check with regex
         public string OriginalUrl { get; init; }
     }
 }

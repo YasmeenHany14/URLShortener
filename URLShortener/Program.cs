@@ -1,10 +1,12 @@
 using URLShortener;
+using URLShortener.Api;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,7 +29,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// app.UseExceptionHandler();
+app.UseExceptionHandler();
 app.UseCors(builder.Configuration["CorsPolicy:PolicyName"]!);
 app.UseAntiforgery();
 app.UseHttpsRedirection();

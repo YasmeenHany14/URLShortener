@@ -91,7 +91,7 @@ export class HomePage {
         this.messageService.add({
           severity: 'error',
           summary: 'URL Shortening Failed',
-          detail: error?.message || 'An error occurred. Please try again.',
+          detail: 'An error occurred. Please try again.',
           life: 4000,
           closable: true
         });
