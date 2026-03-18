@@ -15,7 +15,7 @@ public class UrlController(IUrlShorteningService urlShorteningService) : Control
         return Ok(response);
     }
 
-    [HttpGet("{code:regex(^[[a-zA-Z0-9]]{{7}}$)}")]
+    [HttpGet("~/{code:regex(^[[a-zA-Z0-9]]{{7}}$)}")]
     public async Task<IActionResult> RedirectToDestination(string code)
     {
         var url = await urlShorteningService.GetOriginalUrlAsync(code);

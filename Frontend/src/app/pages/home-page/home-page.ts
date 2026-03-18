@@ -56,7 +56,7 @@ export class HomePage {
   shortenUrlform = new FormGroup({
     originalUrl: new FormControl<string>(this.shortenUrlDetails.originalUrl, {
       validators: [Validators.required, urlFormatValid],
-      updateOn: 'blur'
+      updateOn: 'change'
     })
   })
 

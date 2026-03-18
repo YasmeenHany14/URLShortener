@@ -3,12 +3,14 @@
   <div class="home-card">
     <form [formGroup]="shortenUrlform" (ngSubmit)="onSubmit()" class="form-wrapper">
       <div class="input-group">
-        <input pInputText
-               type="text"
-               id="original-url"
-               placeholder="Enter your URL here"
-               formControlName="originalUrl"
-               class="url-input"/>
+            <input pInputText
+                   type="text"
+                   id="original-url"
+                   name="original-url"
+                   placeholder="Enter your URL here"
+                   formControlName="originalUrl"
+                   [invalid]="isInvalid(shortenUrlform, 'originalUrl')"
+                   class="url-input"/>
         <button pButton
                 type="submit"
                 class="submit-btn"
@@ -17,9 +19,9 @@
         </button>
       </div>
 
-      @if(isInvalid(shortenUrlform, 'original-url')) {
+      @if(isInvalid(shortenUrlform, 'originalUrl')) {
         <div class="error-messages">
-          @for(errorMsg of getErrorMessages(shortenUrlform, 'original-url'); track errorMsg) {
+          @for(errorMsg of getErrorMessages(shortenUrlform, 'originalUrl'); track errorMsg) {
             <p-message severity="error" size="small" variant="simple">{{ errorMsg }}</p-message>
           }
         </div>

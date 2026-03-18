@@ -19,5 +19,6 @@ export function getErrorMessages(form: FormGroup, controlName: string): string[]
 
 export function isInvalid(form: FormGroup, controlName: string): boolean {
   const control = form.get(controlName);
-  return !!(control && control.invalid && (control.dirty || control.touched));
+  let ans = !!(control && control.invalid && (control.dirty || control.touched));
+  return ans;
 }
