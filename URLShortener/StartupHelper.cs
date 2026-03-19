@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using URLShortener.Infra;
 using URLShortener.Infra.Helpers;
 using URLShortener.Infra.Repositories;
@@ -24,7 +25,9 @@ public static class StartupHelper
 
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
+        services.AddMemoryCache();
         services.AddScoped<IUrlShorteningService, UrlShorteningService>();
+        services.AddScoped<ICacheUrlService, CacheUrlService>();
         return services;
     }
 }

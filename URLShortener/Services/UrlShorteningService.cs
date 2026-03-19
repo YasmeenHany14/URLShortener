@@ -5,7 +5,10 @@ using URLShortener.Models.Dtos;
 
 namespace URLShortener.Services;
 
-public class UrlShorteningService(IUrlRepository urlRepository) : IUrlShorteningService
+public class UrlShorteningService(
+    IUrlRepository urlRepository,
+    ICacheUrlService cacheUrlService
+    ) : IUrlShorteningService
 {
     private readonly Random _random = new();
     public async Task<string> GenerateCodeAsync()
@@ -41,10 +44,13 @@ public class UrlShorteningService(IUrlRepository urlRepository) : IUrlShortening
 
     public async Task<string> GetOriginalUrlAsync(string code)
     {
-        var original = await urlRepository.FindByShortcodeAsync(code!);
+        var res = cacheUrlService.GetOriginalUrl(code);
+        if (res != null)
+            return res;
+        var original = await urlRepository.FindByShortcodeAsync(code);
         if (original is null)
             return ErrorMsgs.UrlNotFound;
+        cacheUrlService.CacheUrl(original.OriginalUrl, code);
         return original.OriginalUrl;
     }
-    
 }
