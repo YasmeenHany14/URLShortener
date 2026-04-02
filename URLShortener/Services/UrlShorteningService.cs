@@ -53,4 +53,21 @@ public class UrlShorteningService(
         cacheUrlService.CacheUrl(original.OriginalUrl, code);
         return original.OriginalUrl;
     }
+
+    public async Task<string> CreateCustomUrlAsync(string customCode, string originUrl)
+    {
+        if (! await urlRepository.CodeUnique(customCode))
+            return ErrorMsgs.UrlExists;
+        
+        var entity = new Url
+        {
+            OriginalUrl = originUrl,
+            Code = customCode,
+            ShortUrl = customCode
+        };
+        
+        await urlRepository.CreateAsync(entity);
+        await  urlRepository.SaveChangesAsync();
+        return customCode;
+    }
 }
